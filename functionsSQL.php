@@ -1,6 +1,6 @@
 <?php
 include ('functionsHTML.php');
-
+//mostrando noticias na home page
 function showNews($conn){   //requer noticia-tum.jpg no diretorio imagens
 	$sqlNews = mysqli_query($conn, "SELECT * FROM news WHERE status='show' ORDER BY id LIMIT 3");
 
@@ -20,7 +20,7 @@ function showNews($conn){   //requer noticia-tum.jpg no diretorio imagens
         newsListDisplay($icon, $title, $content, $author, $dia, $mes, $views, $id);
 	}
 }
-
+//expandindo a noticia
 function returnNew($conn, $id){
 	$new = mysqli_query($conn, "SELECT * FROM news WHERE id='$id'");
 	if($new != null){
@@ -38,7 +38,7 @@ function returnNew($conn, $id){
 	}
 
 }
-
+//mostrando lista de itens do market
 function marketItems($conn, $kind){
 	$item = mysqli_query($conn, "SELECT * FROM `GoodsListInfo` WHERE `Kind`='$kind' AND `Pay`='PAY' ORDER BY `GoodsID`");
 	
@@ -69,7 +69,7 @@ function marketItems($conn, $kind){
 	}
 
 }
-
+//mostrando um item selecionado do market
 function showItem($conn, $GoodsID, $login){
 	$itemViewQ = mysqli_query($conn, "SELECT * FROM GoodsListInfo WHERE GoodsID='$GoodsID'");
 	$itemView = mysqli_fetch_array($itemViewQ, MYSQLI_ASSOC);
@@ -88,7 +88,7 @@ function showItem($conn, $GoodsID, $login){
 	selectChar($conn, $login, $GoodsID);
 	
 }
-
+//realizando a compra do item
 function buyItem($conn, $login, $password, $char, $item){
     $selectAcc = mysqli_query($conn, "SELECT * FROM Player WHERE PlayerID = '$login' and Password = PASSWORD('$password')");
     $account = mysqli_fetch_array($selectAcc, MYSQLI_ASSOC);
@@ -130,7 +130,7 @@ function buyItem($conn, $login, $password, $char, $item){
     	}          		
 	}
 }
-
+//escolhendo o personagem a receber o item
 function selectChar($conn, $login, $item){
 	$active = "ACTIVE";
 	$charSelection = mysqli_query($conn, "SELECT Name, Race FROM Slayer WHERE PlayerID = '$login' AND Active = '$active' ");
@@ -154,7 +154,7 @@ function selectChar($conn, $login, $item){
 function marketCategories(){
 	listCategories();
 }
- 
+ //mostrando todos os personagens de classe em ordem descendente
 function rankSlay($conn, $limit){
     $sqlResult = mysqli_query($conn, "SELECT Name, BladeLevel+SwordLevel+GunLevel+EnchantLevel+HealLevel+AdvancementClass AS Level, Rank FROM Slayer WHERE Active='ACTIVE' ORDER BY Level DESC LIMIT $limit");   
 
@@ -164,7 +164,7 @@ function rankSlay($conn, $limit){
         listRank('slayer', $name, $level);
     }
 }  
-
+//mostrando todos os personagens de classe em ordem descendente
 function rankVamp($conn, $limit){
     $sqlResult =  mysqli_query($conn, "SELECT Name, Level+AdvancementClass AS Level, Rank FROM Vampire WHERE Active='ACTIVE'  ORDER BY Level DESC LIMIT $limit");
 
@@ -174,7 +174,7 @@ function rankVamp($conn, $limit){
         listRank('vampire', $name, $level);
     }        
 }
-
+//mostrando todos os personagens de classe em ordem descendente
 function rankOust($conn, $limit){
     $sqlResult =  mysqli_query($conn, "SELECT Name, Level+AdvancementClass AS Level, Rank FROM Ousters WHERE Active='ACTIVE'  ORDER BY Level DESC LIMIT $limit");
 
@@ -184,7 +184,7 @@ function rankOust($conn, $limit){
         listRank('ouster', $name, $level);
     }       
 }
-
+//confirmação de pagamento
 function comfirmTransaction($conn, $PlayerID, $key){
 	if($PlayerID != null && $key != ''){
 		mysqli_query($conn, "INSERT INTO DonateKey (PlayerID, TransactionID, STATUS) VALUES ('$PlayerID', '$key', 'PENDING')");
@@ -195,7 +195,7 @@ function comfirmTransaction($conn, $PlayerID, $key){
 		echo '</br></br><center><h1>Insert a proper key</h1><center>';
 	}
 }
-
+//verificar privilégios
 function verifyAccountLevel($conn, $account, $password){
 	$sqlConta = "SELECT * FROM Player WHERE PlayerID = '".$account."' and Password = PASSWORD('".$password."')";
 	$account = mysqli_query($conn,$sqlConta);
@@ -211,7 +211,7 @@ function verifyAccountLevel($conn, $account, $password){
 		return "PLAYER";
 	}
 }
-
+//autenticar conta
 function verifyAccountData($conn, $account, $password){
 	$sqlConta = "SELECT * FROM Player WHERE PlayerID = '".$account."' and Password = PASSWORD('".$password."')";
 	$account = mysqli_query($conn,$sqlConta);
@@ -219,7 +219,7 @@ function verifyAccountData($conn, $account, $password){
 
 	return $accData;
 }
-
+//mostrar doações pendentes de confirmação
 function showPendingDonates($conn){
 	$donates = mysqli_query($conn, "SELECT * FROM DonateKey WHERE STATUS = 'PENDING' ");
 	echo '
